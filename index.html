@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Degi Pictures — Photography & Videography</title>
+<meta name="description" content="Degi Pictures is a photography and videography studio capturing weddings, portraits, graduations, ceremonies, birthdays and aerial moments.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #15120E;
+    --bg-alt: #1D1914;
+    --bg-raised: #241F18;
+    --text: #F3EDE2;
+    --text-muted: #A99C87;
+    --text-faint: #786E5D;
+    --accent: #D6A44E;
+    --accent-soft: #E9C787;
+    --accent-deep: #93482F;
+    --line: rgba(243,237,226,0.12);
+    --line-strong: rgba(243,237,226,0.22);
+    --shadow: 0 20px 60px rgba(0,0,0,0.45);
+    --ease: cubic-bezier(.22,.68,0,1);
+    --dur-page: 520ms;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    line-height:1.08;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  p{margin:0;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none; margin:0; padding:0;}
+  img{max-width:100%; display:block;}
+  button{font-family:inherit; cursor:pointer;}
+
+  ::selection{ background:var(--accent); color:#1A1510; }
+
+  /* ---------- grain + vignette ---------- */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:9998;
+    opacity:0.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .vignette{
+    position:fixed; inset:0; pointer-events:none; z-index:9997;
+    box-shadow: inset 0 0 18vw rgba(0,0,0,0.55);
+  }
+
+  /* ---------- layout helpers ---------- */
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+  @media(max-width:640px){ .wrap{ padding:0 20px; } }
+
+  .tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; color:var(--accent-soft);
+    font-weight:500;
+  }
+  .tag::before{
+    content:""; width:14px; height:1px; background:var(--accent);
+  }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    gap:10px;
+    padding:15px 30px;
+    border-radius:999px;
+    font-size:14.5px; font-weight:600;
+    border:1px solid transparent;
+    transition:transform 420ms var(--ease), background 300ms ease, border-color 300ms ease, color 300ms ease;
+    white-space:nowrap;
+  }
+  .btn-primary{ background:var(--accent); color:#1A1510; }
+  .btn-primary:hover{ transform:translateY(-2px); background:var(--accent-soft); }
+  .btn-ghost{ border-color:var(--line-strong); color:var(--text); }
+  .btn-ghost:hover{ transform:translateY(-2px); border-color:var(--accent); color:var(--accent-soft); }
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:fixed; top:0; left:0; right:0; z-index:500;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:26px 32px;
+    transition:padding 400ms var(--ease), background 400ms ease, border-color 400ms ease;
+    border-bottom:1px solid transparent;
+  }
+  .nav.scrolled{
+    padding:16px 32px;
+    background:rgba(21,18,14,0.86);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-size:20px; font-weight:600;
+    display:flex; align-items:baseline; gap:8px;
+    letter-spacing:-0.01em;
+  }
+  .brand em{
+    font-style:italic; color:var(--accent-soft); font-weight:500;
+  }
+  .nav-links{ display:flex; align-items:center; gap:2px; }
+  .nav-links a{
+    position:relative;
+    padding:9px 16px;
+    font-size:14px; font-weight:500;
+    color:var(--text-muted);
+    transition:color 300ms ease;
+  }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-links a::after{
+    content:""; position:absolute; left:16px; right:16px; bottom:4px; height:1px;
+    background:var(--accent);
+    transform:scaleX(0); transform-origin:left;
+    transition:transform 380ms var(--ease);
+  }
+  .nav-links a.active{ color:var(--text); }
+  .nav-links a.active::after{ transform:scaleX(1); }
+
+  .nav-right{ display:flex; align-items:center; gap:18px; }
+  .nav-cta{ display:inline-flex; }
+  .menu-btn{
+    display:none; background:none; border:none; color:var(--text);
+    width:40px; height:40px; align-items:center; justify-content:center;
+  }
+
+  @media(max-width:880px){
+    .nav-links{
+      position:fixed; inset:0 0 0 auto; width:min(78vw,340px);
+      background:var(--bg-alt);
+      flex-direction:column; align-items:flex-start;
+      padding:100px 32px 32px;
+      gap:6px;
+      transform:translateX(100%);
+      transition:transform 460ms var(--ease);
+      border-left:1px solid var(--line);
+    }
+    .nav-links.open{ transform:translateX(0); }
+    .nav-links a{ font-size:17px; padding:12px 6px; width:100%; }
+    .nav-cta{ display:none; }
+    .menu-btn{ display:inline-flex; z-index:600; }
+    .nav.menu-open{ background:rgba(21,18,14,0.95); }
+  }
+
+  .scrim{
+    position:fixed; inset:0; background:rgba(10,8,6,0.5); z-index:490;
+    opacity:0; pointer-events:none; transition:opacity 400ms ease;
+  }
+  .scrim.show{ opacity:1; pointer-events:auto; }
+
+  /* ---------- page sections (single continuous scroll) ---------- */
+  .page{ display:block; min-height:auto; scroll-margin-top:88px; }
+  .page + .page{ border-top:1px solid var(--line); }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ---------- section shell ---------- */
+  section.block{ padding:110px 0 100px; }
+  .block-inner + .block-inner{ margin-top:96px; }
+  .section-head{ max-width:640px; margin-bottom:56px; }
+  .section-head h2{ font-size:clamp(30px,4vw,44px); margin-top:14px; }
+  .section-head p{ margin-top:18px; color:var(--text-muted); font-size:16.5px; max-width:520px; }
+
+  /* ==================================================
+     HOME
+  =================================================== */
+  #home .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:flex-end;
+    padding:0 0 90px;
+    overflow:hidden;
+  }
+  .hero-stage{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(120% 90% at 78% 0%, rgba(214,164,78,0.18), transparent 55%),
+      linear-gradient(180deg, #1c1710 0%, #15120e 60%, #100d0a 100%);
+  }
+  .hero-frame{
+    position:absolute; inset:0;
+  }
+  .hero-photo{
+    position:absolute; inset:0; width:100%; height:100%; overflow:hidden;
+    filter:saturate(0.92) contrast(1.02);
+    z-index:1;
+    opacity:0;
+    transition: opacity 1.2s ease;
+  }
+  .hero-photo.active{
+    opacity:1;
+    z-index:2;
+  }
+  .hero-photo img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    transform:scale(1);
+    animation: heroPhotoZoom 20s ease-in-out infinite;
+  }
+  .hero-photo img.broken{ opacity:0 !important; }
+  @keyframes heroPhotoZoom{
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.08); }
+    100%{ transform:scale(1); }
+  }
+  .hero-photo::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(21,18,14,0.15) 0%, rgba(21,18,14,0.55) 72%, rgba(21,18,14,0.92) 100%);
+  }
+  .hero-fallback{
+    position:absolute; inset:0; z-index:0;
+    background:linear-gradient(150deg, var(--accent-deep), #241a12 60%, #15120e);
+  }
+
+  .hero-content{ position:relative; z-index:2; width:100%; }
+  .hero-eyebrow{
+    display:flex; align-items:center; gap:10px;
+    color:var(--accent-soft); font-size:14px; font-weight:500;
+    margin-bottom:22px;
+    opacity:0; transform:translateY(14px);
+    animation: revealUp 900ms var(--ease) 200ms forwards;
+  }
+  .hero-eyebrow span{ width:26px; height:1px; background:var(--accent); display:inline-block; }
+
+  .hero h1{
+    font-size:clamp(40px, 7.4vw, 92px);
+    color:var(--text);
+    max-width:15ch;
+  }
+  .hero h1 .line{ display:block; overflow:hidden; }
+  .hero h1 .line span{
+    display:inline-block;
+    transform:translateY(115%);
+    animation: lineUp 950ms var(--ease) forwards;
+  }
+  .hero h1 .line:nth-child(1) span{ animation-delay:340ms; }
+  .hero h1 .line:nth-child(2) span{ animation-delay:480ms; color:var(--accent-soft); font-style:italic; font-weight:500; }
+  @keyframes lineUp{ to{ transform:translateY(0); } }
+
+  .hero-sub{
+    margin-top:28px; max-width:480px; color:var(--text-muted); font-size:17px;
+    opacity:0; transform:translateY(14px);
+    animation: revealUp 900ms var(--ease) 760ms forwards;
+  }
+  .hero-actions{
+    margin-top:38px; display:flex; gap:14px; flex-wrap:wrap;
+    opacity:0; transform:translateY(14px);
+    animation: revealUp 900ms var(--ease) 920ms forwards;
+  }
+  @keyframes revealUp{ to{ opacity:1; transform:translateY(0); } }
+
+  .hero-meta{
+    position:absolute; right:32px; bottom:40px; z-index:2;
+    display:flex; flex-direction:column; align-items:flex-end; gap:10px;
+    color:var(--text-faint); font-size:13px;
+    opacity:0; animation: revealUp 900ms var(--ease) 1100ms forwards;
+  }
+  .hero-meta .idx{ color:var(--accent-soft); font-family:'Fraunces',serif; font-size:15px; }
+  @media(max-width:720px){ .hero-meta{ display:none; } }
+
+  .scroll-cue{
+    position:absolute; left:32px; bottom:40px; z-index:2;
+    display:flex; align-items:center; gap:10px;
+    color:var(--text-faint); font-size:13px;
+    opacity:0; animation: revealUp 900ms var(--ease) 1100ms forwards;
+  }
+  .scroll-cue .dot{
+    width:6px;height:6px;border-radius:50%;background:var(--accent);
+    animation:pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{ opacity:0.3;} 50%{ opacity:1;} }
+
+  /* marquee strip */
+  .marquee{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    overflow:hidden; padding:22px 0; background:var(--bg-alt);
+  }
+  .marquee-track{
+    display:flex; gap:56px; white-space:nowrap;
+    animation:marquee 26s linear infinite;
+    width:max-content;
+  }
+  .marquee-track span{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:500;
+    font-size:20px; color:var(--text-faint);
+    display:inline-flex; align-items:center; gap:56px;
+  }
+  .marquee-track span em{ color:var(--accent); font-style:normal; font-size:8px; }
+  @keyframes marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+
+  /* intro strip on home */
+  .home-intro{ padding:110px 0; }
+  .home-intro .grid{
+    display:grid; grid-template-columns:1.1fr 1fr; gap:70px; align-items:start;
+  }
+  .home-intro h2{ font-size:clamp(28px,4vw,42px); }
+  .home-intro .lede{ color:var(--text-muted); margin-top:22px; font-size:16.5px; max-width:44ch; }
+  .stat-row{ display:flex; gap:44px; margin-top:40px; flex-wrap:wrap; }
+  .stat b{ display:block; font-family:'Fraunces',serif; font-size:34px; color:var(--accent-soft); font-weight:600; }
+  .stat span{ font-size:13.5px; color:var(--text-faint); }
+  .home-services-list{ border-top:1px solid var(--line); }
+  .home-services-list li{
+    border-bottom:1px solid var(--line);
+    padding:16px 4px;
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:15px; color:var(--text-muted);
+  }
+  .home-services-list li b{ color:var(--text); font-weight:500; }
+  @media(max-width:820px){ .home-intro .grid{ grid-template-columns:1fr; gap:36px; } }
+
+  /* featured work strip on home */
+  .featured-strip{ padding:0 0 130px; }
+  .fs-head{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:36px; gap:20px; flex-wrap:wrap; }
+  .fs-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .fs-grid .tile:nth-child(1){ grid-column:span 2; grid-row:span 2; }
+  @media(max-width:900px){ .fs-grid{ grid-template-columns:repeat(2,1fr); } .fs-grid .tile:nth-child(1){ grid-column:span 2; grid-row:span 1; } }
+
+  /* photo tile / placeholder system, reused across sections */
+  .tile{
+    position:relative; border-radius:4px; overflow:hidden;
+    aspect-ratio:4/5; background:var(--bg-raised);
+    cursor:pointer;
+  }
+  .fs-grid .tile:nth-child(1){ aspect-ratio:auto; }
+  .tile img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform 700ms var(--ease);
+  }
+  .tile:hover img{ transform:scale(1.055); }
+  .tile .cap{
+    position:absolute; left:0; right:0; bottom:0; padding:18px;
+    background:linear-gradient(180deg, transparent, rgba(10,8,6,0.85));
+    display:flex; align-items:flex-end; justify-content:space-between; gap:10px;
+    opacity:0; transform:translateY(8px);
+    transition:opacity 380ms ease, transform 380ms ease;
+  }
+  .tile:hover .cap{ opacity:1; transform:translateY(0); }
+  .tile .cap b{ font-family:'Fraunces',serif; font-weight:500; font-size:16px; }
+  .tile .cap span{ font-size:12px; color:var(--accent-soft); }
+
+  /* fallback placeholder look (used if an image fails, or intentionally for equipment) */
+  .ph{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(140% 100% at 15% 0%, var(--ph-a,rgba(214,164,78,0.16)), transparent 60%),
+      linear-gradient(155deg, var(--ph-b,#2a2118), var(--ph-c,#171310));
+  }
+  .ph svg{ width:34%; max-width:70px; opacity:0.5; stroke:var(--accent-soft); }
+  .ph-label{
+    position:absolute; left:14px; bottom:14px; font-size:12px; color:var(--text-faint);
+    display:flex; align-items:center; gap:8px;
+  }
+  .ph-label .sq{ width:5px;height:5px; background:var(--accent); }
+  img.broken{ display:none; }
+  /* only show the .ph placeholder graphic when the photo right before it actually failed to load */
+  .tile img:not(.broken) ~ .ph,
+  .tile img:not(.broken) ~ .ph-label{ display:none; }
+
+  /* ==================================================
+     ABOUT
+  =================================================== */
+  #about .about-grid{
+    display:grid; grid-template-columns:0.85fr 1.15fr; gap:80px; align-items:center;
+  }
+  .about-portrait{
+    position:relative; aspect-ratio:3/4; border-radius:4px; overflow:hidden;
+    background:var(--bg-raised);
+  }
+  .about-portrait img{ width:100%; height:100%; object-fit:cover; }
+  .about-portrait .frame-tag{
+    position:absolute; top:16px; left:16px;
+    font-size:12px; color:var(--text); background:rgba(21,18,14,0.55);
+    backdrop-filter:blur(6px);
+    padding:7px 12px; border:1px solid var(--line-strong); border-radius:999px;
+  }
+  .about-signature{
+    margin-top:22px; display:flex; align-items:center; gap:14px;
+  }
+  .about-signature .sig{ font-family:'Fraunces',serif; font-style:italic; font-size:26px; color:var(--accent-soft); }
+  .about-signature .role{ font-size:13px; color:var(--text-faint); line-height:1.4; }
+
+  .about-copy .tag{ margin-bottom:16px; }
+  .about-copy h2{ font-size:clamp(28px,4vw,40px); }
+  .about-copy p{ color:var(--text-muted); margin-top:20px; font-size:16px; max-width:56ch; }
+  .about-copy p + p{ margin-top:14px; }
+
+  .about-facts{
+    margin-top:36px; display:grid; grid-template-columns:repeat(3,1fr); gap:0;
+    border-top:1px solid var(--line);
+  }
+  .about-facts div{ padding:18px 0; border-bottom:1px solid var(--line); }
+  .about-facts div:not(:last-child){ border-right:1px solid var(--line); padding-right:14px; }
+  .about-facts b{ display:block; font-family:'Fraunces',serif; font-size:22px; color:var(--accent-soft); }
+  .about-facts span{ font-size:12.5px; color:var(--text-faint); }
+  @media(max-width:820px){
+    #about .about-grid{ grid-template-columns:1fr; gap:44px; }
+    .about-facts{ grid-template-columns:repeat(3,1fr); }
+  }
+
+  .about-approach{ margin-top:100px; }
+  .approach-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:36px; }
+  .approach-item{ background:var(--bg); padding:34px 30px; }
+  .approach-item .n{ font-family:'Fraunces',serif; font-style:italic; color:var(--accent); font-size:15px; }
+  .approach-item h4{ font-size:19px; margin-top:14px; }
+  .approach-item p{ color:var(--text-muted); font-size:14.5px; margin-top:10px; }
+  @media(max-width:820px){ .approach-grid{ grid-template-columns:1fr; } }
+
+  /* ==================================================
+     SERVICES
+  =================================================== */
+  .services-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  .service-card{
+    background:var(--bg); padding:34px 28px; min-height:230px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    transition:background 380ms ease;
+  }
+  .service-card:hover{ background:var(--bg-alt); }
+  .service-card .icon{ width:34px; height:34px; color:var(--accent-soft); }
+  .service-card .num{ font-size:12px; color:var(--text-faint); font-family:'Fraunces',serif; }
+  .service-card h3{ font-size:20px; margin-top:16px; }
+  .service-card p{ font-size:13.8px; color:var(--text-muted); margin-top:10px; }
+  @media(max-width:960px){ .services-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:560px){ .services-grid{ grid-template-columns:1fr; } }
+
+  .services-cta{
+    margin-top:80px; padding:56px; border-radius:6px;
+    background:linear-gradient(120deg, var(--bg-raised), var(--bg-alt));
+    display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap;
+    border:1px solid var(--line);
+  }
+  .services-cta h3{ font-size:clamp(22px,3vw,30px); max-width:20ch; }
+
+  /* ==================================================
+     PORTFOLIO
+  =================================================== */
+  .filter-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:40px; }
+  .filter-btn{
+    background:none; border:1px solid var(--line-strong); color:var(--text-muted);
+    padding:9px 18px; border-radius:999px; font-size:13.5px; font-weight:500;
+    transition:all 300ms ease;
+  }
+  .filter-btn:hover{ color:var(--text); border-color:var(--accent); }
+  .filter-btn.active{ background:var(--accent); color:#1A1510; border-color:var(--accent); }
+
+  .portfolio-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+  }
+  .portfolio-grid .tile{ transition:opacity 420ms ease, transform 420ms ease; }
+  .portfolio-grid .tile.hide{ display:none; }
+  @media(max-width:900px){ .portfolio-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:560px){ .portfolio-grid{ grid-template-columns:1fr; } }
+
+  /* lightbox */
+  .lightbox{
+    position:fixed; inset:0; z-index:900; background:rgba(10,8,6,0.92);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity 380ms ease;
+    padding:40px;
+  }
+  .lightbox.open{ opacity:1; pointer-events:auto; }
+  .lightbox-inner{ max-width:900px; width:100%; }
+  .lightbox-img-wrap{ position:relative; aspect-ratio:16/10; border-radius:6px; overflow:hidden; background:var(--bg-raised); }
+  .lightbox-img-wrap img{ width:100%; height:100%; object-fit:cover; }
+  .lightbox-cap{ display:flex; justify-content:space-between; align-items:center; margin-top:18px; color:var(--text-muted); font-size:14px; }
+  .lightbox-cap b{ color:var(--text); font-family:'Fraunces',serif; font-weight:500; font-size:17px; }
+  .lightbox-controls{ position:absolute; top:-56px; right:0; display:flex; gap:10px; }
+  .lb-btn{
+    width:40px; height:40px; border-radius:50%; border:1px solid var(--line-strong);
+    background:rgba(21,18,14,0.6); color:var(--text);
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color 250ms ease, color 250ms ease;
+  }
+  .lb-btn:hover{ border-color:var(--accent); color:var(--accent-soft); }
+  .lb-nav{ position:absolute; top:50%; transform:translateY(-50%); }
+  .lb-prev{ left:-58px; } .lb-next{ right:-58px; }
+  @media(max-width:820px){ .lb-nav{ display:none; } .lightbox-controls{ top:auto; bottom:-56px; right:0; } }
+
+  /* ==================================================
+     TESTIMONIALS
+  =================================================== */
+  .testi-wrap{ position:relative; max-width:820px; margin:0 auto; text-align:center; }
+  .testi-slide{ display:none; }
+  .testi-slide.active{ display:block; animation:revealUp 620ms var(--ease) both; }
+  .testi-stars{ display:flex; gap:4px; justify-content:center; color:var(--accent); margin-bottom:26px; }
+  .testi-stars svg{ width:16px; height:16px; }
+  .testi-quote{ font-family:'Fraunces',serif; font-weight:500; font-size:clamp(21px,3vw,30px); line-height:1.35; }
+  .testi-person{ margin-top:30px; display:flex; align-items:center; justify-content:center; gap:14px; }
+  .testi-avatar{
+    width:44px; height:44px; border-radius:50%; background:var(--bg-raised);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; color:var(--accent-soft); font-size:16px;
+    border:1px solid var(--line-strong);
+  }
+  .testi-person .who{ text-align:left; }
+  .testi-person b{ display:block; font-size:14.5px; }
+  .testi-person span{ font-size:12.5px; color:var(--text-faint); }
+
+  .testi-dots{ display:flex; justify-content:center; gap:9px; margin-top:44px; }
+  .testi-dots button{
+    width:8px; height:8px; border-radius:50%; border:none; background:var(--line-strong);
+    transition:background 300ms ease, width 300ms ease;
+  }
+  .testi-dots button.active{ background:var(--accent); width:22px; border-radius:5px; }
+
+  .testi-arrows{ display:flex; justify-content:center; gap:12px; margin-top:30px; }
+
+  /* ==================================================
+     EQUIPMENT
+  =================================================== */
+  .equip-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .equip-card{
+    border:1px solid var(--line); border-radius:6px; overflow:hidden; background:var(--bg-alt);
+  }
+  .equip-visual{ aspect-ratio:1/1; position:relative; }
+  .equip-body{ padding:22px; border-top:1px solid var(--line); }
+  .equip-body h4{ font-size:17px; }
+  .equip-body p{ font-size:13.5px; color:var(--text-muted); margin-top:8px; }
+  .equip-tag{
+    display:inline-block; margin-top:12px; font-size:11px; color:var(--text-faint);
+    border:1px solid var(--line-strong); padding:4px 10px; border-radius:999px;
+  }
+  @media(max-width:900px){ .equip-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:560px){ .equip-grid{ grid-template-columns:1fr; } }
+
+  /* ==================================================
+     CONTACT
+  =================================================== */
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:70px; }
+  .contact-copy h2{ font-size:clamp(30px,4.4vw,46px); }
+  .contact-copy p{ margin-top:20px; color:var(--text-muted); max-width:42ch; font-size:16px; }
+  .contact-direct{ margin-top:34px; }
+  .contact-direct a{
+    font-family:'Fraunces',serif; font-size:22px; color:var(--accent-soft);
+    display:inline-block; border-bottom:1px solid var(--line-strong); padding-bottom:6px;
+    transition:border-color 300ms ease;
+  }
+  .contact-direct a:hover{ border-color:var(--accent); }
+  .contact-direct .label{ display:block; font-family:'Inter',sans-serif; font-size:12.5px; color:var(--text-faint); margin-top:26px; margin-bottom:8px; }
+
+  .contact-links{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .clink{
+    border:1px solid var(--line); border-radius:6px; padding:26px 22px;
+    display:flex; flex-direction:column; gap:34px;
+    transition:border-color 320ms ease, transform 320ms ease, background 320ms ease;
+    background:var(--bg-alt);
+  }
+  .clink:hover{ border-color:var(--accent); transform:translateY(-4px); background:var(--bg-raised); }
+  .clink .icon{ width:26px; height:26px; color:var(--accent-soft); }
+  .clink b{ font-size:15px; font-weight:600; display:block; }
+  .clink span{ font-size:12.5px; color:var(--text-faint); }
+  @media(max-width:820px){ .contact-grid{ grid-template-columns:1fr; gap:44px; } }
+  @media(max-width:480px){ .contact-links{ grid-template-columns:1fr; } }
+
+  /* ==================================================
+     FOOTER
+  =================================================== */
+  footer{ border-top:1px solid var(--line); padding:56px 0 34px; margin-top:60px; }
+  .footer-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:30px; flex-wrap:wrap; }
+  .footer-brand{ font-family:'Fraunces',serif; font-size:22px; }
+  .footer-brand em{ font-style:italic; color:var(--accent-soft); font-weight:500; }
+  .footer-links{ display:flex; gap:26px; flex-wrap:wrap; }
+  .footer-links a{ font-size:13.5px; color:var(--text-muted); transition:color 250ms ease; }
+  .footer-links a:hover{ color:var(--text); }
+  .footer-bottom{
+    margin-top:44px; padding-top:22px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; color:var(--text-faint); font-size:12.5px; flex-wrap:wrap; gap:10px;
+  }
+
+  /* reveal-on-scroll (light touch, used only for a few elements) */
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity 700ms var(--ease), transform 700ms var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="vignette"></div>
+<div class="scrim" id="scrim"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <a href="#home" class="brand" data-nav="home">Degi <em>Pictures</em></a>
+  <nav class="nav-links" id="navLinks">
+    <a href="#home" data-nav="home">Home</a>
+    <a href="#about" data-nav="about">About Me</a>
+    <a href="#services" data-nav="services">Services</a>
+    <a href="#portfolio" data-nav="portfolio">Portfolio</a>
+    <a href="#testimonials" data-nav="testimonials">Testimonies</a>
+    <a href="#equipment" data-nav="equipment">Equipments</a>
+    <a href="#contact" data-nav="contact">Contacts</a>
+  </nav>
+  <div class="nav-right">
+    <a href="#contact" class="btn btn-primary nav-cta" data-nav="contact">Book a session</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
+      <svg id="menuIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="13" x2="21" y2="13"/><line x1="3" y1="19" x2="15" y2="19"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- ============ HOME ============ -->
+  <section class="page" id="home">
+    <div class="hero">
+      <div class="hero-stage"></div>
+      <div class="hero-frame" id="heroFrame">
+        <div class="hero-photo"><img id="heroImg1" alt="Wedding moment" onerror="this.classList.add('broken')"></div>
+        <div class="hero-photo"><img id="heroImg2" alt="Outdoor ceremony" onerror="this.classList.add('broken')"></div>
+        <div class="hero-photo"><img id="heroImg3" alt="Aerial drone view" onerror="this.classList.add('broken')"></div>
+        <div class="hero-photo"><img id="heroImg4" alt="Studio portrait" onerror="this.classList.add('broken')"></div>
+        <div class="hero-fallback"></div>
+      </div>
+
+      <div class="wrap hero-content">
+        <div class="hero-eyebrow"><span></span>Photography &amp; videography studio</div>
+        <h1>
+          <span class="line"><span>Moments,</span></span>
+          <span class="line"><span>framed to last.</span></span>
+        </h1>
+        <p class="hero-sub">Degi Pictures captures weddings, portraits, graduations and everything between — on the ground and from the air — and turns the day into something you'll want to look at for years.</p>
+        <div class="hero-actions">
+          <a href="#portfolio" class="btn btn-primary" data-nav="portfolio">View portfolio</a>
+          <a href="#contact" class="btn btn-ghost" data-nav="contact">Get in touch</a>
+        </div>
+      </div>
+
+      <div class="scroll-cue"><span class="dot"></span>Scroll to explore</div>
+      <div class="hero-meta"><span class="idx">Est. Wolaita Sodo</span><span>Available for travel bookings</span></div>
+    </div>
+
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>Weddings <em>●</em> Graduations <em>●</em> Ceremonies <em>●</em> Portraits <em>●</em> Birthdays <em>●</em> Drone shots <em>●</em> Videography <em>●</em> Photo editing <em>●</em></span>
+        <span>Weddings <em>●</em> Graduations <em>●</em> Ceremonies <em>●</em> Portraits <em>●</em> Birthdays <em>●</em> Drone shots <em>●</em> Videography <em>●</em> Photo editing <em>●</em></span>
+      </div>
+    </div>
+
+    <div class="wrap home-intro">
+      <div class="grid">
+        <div>
+          <span class="tag">Behind the studio</span>
+          <h2 style="margin-top:14px;">A steady eye for the moments people ask to relive.</h2>
+          <p class="lede">Degi Pictures is built around one idea: the best photograph doesn't interrupt the moment, it disappears into it. Every wedding, ceremony and portrait session is shot to feel unposed, then finished with a careful, film-inspired edit.</p>
+          <div class="stat-row">
+            <div class="stat"><b>120+</b><span>Events covered</span></div>
+            <div class="stat"><b>8</b><span>Services offered</span></div>
+            <div class="stat"><b>2</b><span>Countries served</span></div>
+          </div>
+        </div>
+        <ul class="home-services-list">
+          <li><b>Weddings</b><span>Full-day coverage</span></li>
+          <li><b>Portraits</b><span>Studio &amp; on location</span></li>
+          <li><b>Drone shots</b><span>Aerial coverage</span></li>
+          <li><b>Videography</b><span>Highlight films</span></li>
+          <li><b>Photo editing</b><span>Retouch &amp; color grade</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wrap featured-strip">
+      <div class="fs-head">
+        <div>
+          <span class="tag">Selected work</span>
+          <h2 style="margin-top:14px; font-size:clamp(26px,3.6vw,38px);">A few recent frames</h2>
+        </div>
+        <a href="#portfolio" class="btn btn-ghost" data-nav="portfolio">See full portfolio</a>
+      </div>
+      <div class="fs-grid" id="homeFeatured"></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="page" id="about">
+    <div class="wrap block">
+      <div class="about-grid">
+        <div>
+          <div class="about-portrait">
+            <img id="aboutPortraitImg" alt="Portrait of Degi, founder of Degi Pictures" onerror="this.classList.add('broken')">
+            <div class="frame-tag">Degi — Founder &amp; lead photographer</div>
+          </div>
+          <div class="about-signature">
+            <span class="sig">Degi</span>
+            <span class="role">Founder &amp; lead photographer,<br>Degi Pictures</span>
+          </div>
+        </div>
+        <div class="about-copy">
+          <span class="tag">About me</span>
+          <h2>I got into photography chasing light. I stayed for the stories.</h2>
+          <p>Hi, I'm Deginet Desta Mena (Degi) — the photographer and videographer behind Degi Pictures. What started as covering friends' weddings on weekends has grown into a full studio practice spanning weddings, graduations, ceremonies, portraits and aerial work across Ethiopia and beyond.</p>
+          <p>My approach is simple: show up early, stay observant, and let the day unfold naturally in front of the camera. I edit every set myself, frame by frame, so the final gallery feels consistent, warm and true to how the day actually felt.</p>
+          <p>When I'm not shooting, I'm usually testing new gear, flying the drone somewhere new, or going back through old albums looking for the shot I almost missed.</p>
+          <div class="about-facts">
+            <div><b>6+ yrs</b><span>Behind the camera</span></div>
+            <div><b>120+</b><span>Events shot</span></div>
+            <div><b>8</b><span>Core services</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-approach">
+        <span class="tag">How I work</span>
+        <div class="approach-grid">
+          <div class="approach-item">
+            <span class="n">Before</span>
+            <h4>Plan the light</h4>
+            <p>A short call to walk through the schedule, locations and the shots that matter most to you before the day begins.</p>
+          </div>
+          <div class="approach-item">
+            <span class="n">During</span>
+            <h4>Stay out of the way</h4>
+            <p>Minimal direction, maximum presence — capturing real moments as they happen rather than staging them.</p>
+          </div>
+          <div class="approach-item">
+            <span class="n">After</span>
+            <h4>Edit with care</h4>
+            <p>Every image is reviewed and graded by hand, delivered as a curated gallery rather than a raw dump of files.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="page" id="services">
+    <div class="wrap block">
+      <div class="section-head">
+        <span class="tag">What I offer</span>
+        <h2>Services built around real occasions</h2>
+        <p>From full wedding-day coverage to a single portrait session, every service is shot and edited by Degi personally.</p>
+      </div>
+
+      <div class="services-grid" id="servicesGrid"></div>
+
+      <div class="services-cta">
+        <h3>Not sure which service fits your event?</h3>
+        <a href="#contact" class="btn btn-primary" data-nav="contact">Talk it through with Degi</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PORTFOLIO ============ -->
+  <section class="page" id="portfolio">
+    <div class="wrap block">
+      <div class="section-head">
+        <span class="tag">Recent work</span>
+        <h2>Portfolio</h2>
+        <p>A selection of frames from weddings, ceremonies, portraits and aerial shoots. Filter by the kind of event you're planning.</p>
+      </div>
+
+      <div class="filter-row" id="filterRow"></div>
+      <div class="portfolio-grid" id="portfolioGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="page" id="testimonials">
+    <div class="wrap block">
+      <div class="section-head" style="margin:0 auto 64px; text-align:center;">
+        <span class="tag" style="justify-content:center;">Client words</span>
+        <h2>Testimonies</h2>
+        <p style="margin-left:auto;margin-right:auto;">What people say after working with Degi Pictures.</p>
+      </div>
+
+      <div class="testi-wrap">
+        <div id="testiSlides"></div>
+        <div class="testi-arrows">
+          <button class="lb-btn" id="testiPrev" aria-label="Previous testimony" style="position:static;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="lb-btn" id="testiNext" aria-label="Next testimony" style="position:static;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+        <div class="testi-dots" id="testiDots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EQUIPMENT ============ -->
+  <section class="page" id="equipment">
+    <div class="wrap block">
+      <div class="section-head">
+        <span class="tag">The kit</span>
+        <h2>Equipments</h2>
+        <p>A placeholder look at the gear behind the studio — swap these in for real product photos whenever you're ready.</p>
+      </div>
+      <div class="equip-grid" id="equipGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="page" id="contact">
+    <div class="wrap block">
+      <div class="contact-grid">
+        <div class="contact-copy">
+          <span class="tag">Get in touch</span>
+          <h2>Let's plan your shoot</h2>
+          <p>Tell me the date, the place and what you have in mind — I'll get back to you with availability and a quote within a day or two.</p>
+          <div class="contact-direct">
+            <span class="label">Email</span>
+            <a href="mailto:hello@degipictures.com">hello@degipictures.com</a>
+          </div>
+        </div>
+
+        <div class="contact-links">
+          <a class="clink" href="https://www.facebook.com/share/1BpDbRij4t/?mibextid=wwXIfr" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h-2a4 4 0 0 0-4 4v3H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            <div><b>Facebook</b><span>@degipictures</span></div>
+          </a>
+          <a class="clink" href="https://wa.me/251938879233" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.5 8.5 0 1 1-3.86-7.14"/><path d="M12.5 3.36A8.5 8.5 0 0 1 20.5 11.5"/><path d="M8 10.5c.3 2.7 2.3 4.7 5 5l1-1.4-2-1-.6.7a5.2 5.2 0 0 1-2.7-2.7l.7-.6-1-2z"/></svg>
+            <div><b>WhatsApp</b><span>+251 938 879 233</span></div>
+          </a>
+          <a class="clink" href="https://t.me/251938879233" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4 3 11.5l6 2m12-9.5-3.5 16-6-4.5m9.5-11.5-9.5 8.5m0 0-.5 5"/></svg>
+            <div><b>Telegram</b><span>@degipictures</span></div>
+          </a>
+          <a class="clink" href="mailto:hello@degipictures.com">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            <div><b>Email</b><span>hello@degipictures.com</span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">Degi <em>Pictures</em></div>
+      <div class="footer-links">
+        <a href="#home" data-nav="home">Home</a>
+        <a href="#about" data-nav="about">About Me</a>
+        <a href="#services" data-nav="services">Services</a>
+        <a href="#portfolio" data-nav="portfolio">Portfolio</a>
+        <a href="#testimonials" data-nav="testimonials">Testimonies</a>
+        <a href="#equipment" data-nav="equipment">Equipments</a>
+        <a href="#contact" data-nav="contact">Contacts</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Degi Pictures. All rights reserved.</span>
+      <span>Based in Wolaita Sodo — available worldwide</span>
+    </div>
+  </div>
+</footer>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <div class="lightbox-controls">
+      <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <button class="lb-btn lb-next" id="lbNext" aria-label="Next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="lb-btn" id="lbClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+    </div>
+    <div class="lightbox-img-wrap"><img id="lbImg" src="" alt=""></div>
+    <div class="lightbox-cap"><b id="lbTitle"></b><span id="lbMeta"></span></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ============================================================
+     📸 YOUR PHOTOS — edit everything in this box only.
+     Paste a direct image link between the quotes " " for each
+     item. Leave it as "" (empty) to keep the placeholder look.
+     Nothing else in this file needs to change.
+  ============================================================ */
+  const PHOTOS = {
+
+    // the 4 photos that rotate through the homepage hero banner
+    hero: [
+      "images/degi.jpg",
+      "images/degi2.jpg",
+      "images/degi3.jpg",
+      "images/degi4.jpg",
+      "images/degi5.jpg"
+    ],
+
+    // Degi's photo on the "About Me" page
+    aboutPortrait: "images/degi1.jpg",
+
+    // Portfolio photos — add, remove or edit rows freely.
+    // "cat" controls which filter button (Wedding, Drone, etc.) a photo shows under.
+    portfolio: [
+      { cat:'wedding',     label:'Wedding',     title:'First look, Wolaita Sodo', img:'images/cerm1.JPG' },
+      { cat:'wedding',     label:'Wedding',     title:'Reception dance floor',    img:'images/cerm2.JPG' },
+      { cat:'ceremony',    label:'Ceremony',    title:'Outdoor vows',             img:'images/cerm4.JPG' },
+      { cat:'portrait',    label:'Portrait',    title:'Studio session',           img:'images/IMG_7485.JPG' },
+      { cat:'graduation',  label:'Graduation',  title:'Class of 2026',            img:'images/grad.JPG' },
+      { cat:'drone',       label:'Drone',       title:'Venue from above',         img:'images/IMG_7488.JPG' },
+      { cat:'birthday',    label:'Birthday',    title:'Turning six',              img:'images/birth4.JPG.jpg' },
+      { cat:'portrait',    label:'Portrait',    title:'Golden hour',              img:'images/birth5.JPG.jpg' },
+      { cat:'videography', label:'Videography', title:'Behind the scenes',        img:'images/birth6.JPG' },
+      { cat:'wedding',     label:'Wedding',     title:'Bridal party',             img:'images/IMG_1319.JPG' },
+      { cat:'drone',       label:'Drone',       title:'Coastline pass',           img:'images/IMG_7542.JPG' },
+      { cat:'ceremony',    label:'Ceremony',    title:'Traditional rites',        img:'images/IMG_7514.JPG' }
+    ],
+
+    // Equipment photos are OPTIONAL. Leave img:"" and the neat icon
+    // placeholder stays; paste a link and your real gear photo shows instead.
+    equipment: [
+      { icon:'camera', name:'Camera Body', desc:'Full-frame mirrorless body for stills and 4K video.',            tag:'Placeholder', img:'https://i1.adis.ws/i/canon/ecom_DSLR_Camera_Tile_2025_1x1_an?w=940&bg=white&fmt=webp&qlt=80&sm=aspect&aspect=1:1' },
+      { icon:'lens',   name:'Lenses',      desc:'Prime and zoom set covering wide, portrait and telephoto.',      tag:'Placeholder', img:'https://www.cliftoncameras.co.uk/uploads/images/2015-new-site-assets/Blogs/Essential%20Lens%20Guide/lenses-blog.jpg' },
+      { icon:'drone',  name:'Drones',      desc:'4K aerial drone for venue, landscape and establishing shots.',   tag:'Placeholder', img:'https://cdn.thewirecutter.com/wp-content/media/2023/08/drones-2048px-0718.jpg' },
+      { icon:'light',  name:'Lighting',    desc:'Studio strobes and continuous lighting for controlled sessions.',tag:'Placeholder', img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQx_6WxDg7lytHvK0Qnr7wtwSijHg_2gdfPrZHqwTWLkA&s=10' }
+    ]
+  };
+
+  /* ---------------- icon set ---------------- */
+  const ICONS = {
+    ring: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="16" r="4"/><circle cx="16" cy="12.5" r="4"/></svg>',
+    cap: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5-10-5Z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/></svg>',
+    sparkle: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg>',
+    sliders: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="4" x2="5" y2="20"/><circle cx="5" cy="9" r="2.2"/><line x1="12" y1="4" x2="12" y2="20"/><circle cx="12" cy="15" r="2.2"/><line x1="19" y1="4" x2="19" y2="20"/><circle cx="19" cy="7" r="2.2"/></svg>',
+    video: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="1.5"/><path d="M21 8.5 15.5 12 21 15.5v-7Z"/></svg>',
+    balloon: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a5 5 0 0 0 5-5.5A5 5 0 0 0 12 4a5 5 0 0 0-5 5.5A5 5 0 0 0 12 15Z"/><path d="M12 15v2m0 0-1.5 4.5h3L12 17Z"/></svg>',
+    drone: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9.5 9.5 4 4M14.5 9.5 20 4M9.5 14.5 4 20M14.5 14.5 20 20"/><circle cx="4" cy="4" r="1.8"/><circle cx="20" cy="4" r="1.8"/><circle cx="4" cy="20" r="1.8"/><circle cx="20" cy="20" r="1.8"/></svg>',
+    portrait: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><circle cx="12" cy="10" r="3"/><path d="M7 17c1-2.5 3-3.5 5-3.5s4 1 5 3.5"/></svg>',
+    camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13.5" r="4"/></svg>',
+    lens: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2"/></svg>',
+    light: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="10" rx="1.5"/><path d="M9 14v3m6-3v3M8 20h8"/><path d="M9 8h6M9 11h4"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2.5 14.7 9l7 .5-5.3 4.6L18 21l-6-3.8L6 21l1.6-6.9L2.3 9.5l7-.5Z"/></svg>'
+  };
+
+  /* ---------------- site copy (text only — photos live in PHOTOS above) ---------------- */
+  const SERVICES = [
+    { icon:'ring', name:'Weddings', desc:'Full-day coverage from prep to the last dance, shot candidly and quietly.' },
+    { icon:'cap', name:'Graduations', desc:'Portraits and ceremony coverage to mark the milestone properly.' },
+    { icon:'sparkle', name:'Ceremonies', desc:'Cultural, religious and milestone ceremonies, covered with care and respect.' },
+    { icon:'sliders', name:'Photo Editing', desc:'Hand retouching and film-inspired color grading for existing photo sets.' },
+    { icon:'video', name:'Videography', desc:'Highlight films and full-length edits from your event or shoot.' },
+    { icon:'balloon', name:'Birthdays', desc:'Kids\' parties to milestone birthdays, documented without the posing.' },
+    { icon:'drone', name:'Drone Shots', desc:'Aerial coverage for venues, landscapes and establishing shots.' },
+    { icon:'portrait', name:'Portraits', desc:'Studio or on-location sessions for individuals, couples and families.' }
+  ];
+
+  const TESTIMONIALS = [
+    { quote:'Degi photographed our wedding like he\u2019d known us for years. The gallery still makes us emotional months later.', name:'Aline &amp; Eric', role:'Wedding, Wolaita Sodo' },
+    { quote:'The drone shots of the venue were the highlight of our highlight reel. Professional, fast, and genuinely talented.', name:'Marcus O.', role:'Corporate event' },
+    { quote:'My graduation portraits came out better than I imagined. Relaxed session, stunning edit.', name:'Divine K.', role:'Graduation portraits' },
+    { quote:'Booked Degi for my daughter\u2019s birthday and every candid moment was captured without ever feeling staged.', name:'Sarah M.', role:'Birthday party' },
+    { quote:'The photo editing service brought an old family album back to life. Careful, respectful work.', name:'Jonathan P.', role:'Photo editing' }
+  ];
+
+  const PH_HUES = {
+    wedding:['rgba(214,164,78,0.18)','#2c2318','#181410'],
+    ceremony:['rgba(147,72,47,0.22)','#2a2016','#171310'],
+    portrait:['rgba(214,164,78,0.15)','#26201a','#161210'],
+    graduation:['rgba(214,164,78,0.2)','#2c2417','#181410'],
+    drone:['rgba(147,72,47,0.18)','#241d16','#161210'],
+    birthday:['rgba(214,164,78,0.2)','#2b2216','#181410'],
+    videography:['rgba(147,72,47,0.2)','#251d15','#161210']
+  };
+
+  function phTile(cat,label){
+    const hue = PH_HUES[cat]||['rgba(214,164,78,0.16)','#2a2118','#171310'];
+    return '<div class="ph" style="--ph-a:'+hue[0]+';--ph-b:'+hue[1]+';--ph-c:'+hue[2]+'">'+ICONS.camera+'</div><div class="ph-label"><span class="sq"></span>'+label+'</div>';
+  }
+
+  /* ---------------- render: services ---------------- */
+  const servicesGrid = document.getElementById('servicesGrid');
+  servicesGrid.innerHTML = SERVICES.map((s,i)=>
+    '<div class="service-card">'+
+      '<div><span class="num">0'+(i+1)+'</span>'+
+      '<h3>'+s.name+'</h3><p>'+s.desc+'</p></div>'+
+      '<div class="icon">'+ICONS[s.icon]+'</div>'+
+    '</div>'
+  ).join('');
+
+  /* ---------------- populate hero photos + about portrait from PHOTOS ---------------- */
+  ['heroImg1','heroImg2','heroImg3','heroImg4'].forEach((id,i)=>{
+    const url = PHOTOS.hero[i];
+    const el = document.getElementById(id);
+    if(url){ el.src = url; } else { el.classList.add('broken'); }
+  });
+  (function(){
+    const url = PHOTOS.aboutPortrait;
+    const el = document.getElementById('aboutPortraitImg');
+    if(url){ el.src = url; } else { el.classList.add('broken'); }
+  })();
+
+  /* ---------------- render: home featured (first 5 portfolio items) ---------------- */
+  const homeFeatured = document.getElementById('homeFeatured');
+  homeFeatured.innerHTML = PHOTOS.portfolio.slice(0,5).map(p=>
+    '<div class="tile" data-open-img="'+p.img+'" data-open-title="'+p.title+'" data-open-label="'+p.label+'">'+
+      '<img src="'+p.img+'" alt="'+p.title+'" loading="lazy" onerror="this.classList.add(\'broken\')">'+
+      phTile(p.cat,p.label)+
+      '<div class="cap"><b>'+p.title+'</b><span>'+p.label+'</span></div>'+
+    '</div>'
+  ).join('');
+
+  /* ---------------- render: portfolio grid + filters ---------------- */
+  const categories = ['all', ...new Set(PHOTOS.portfolio.map(p=>p.cat))];
+  const filterRow = document.getElementById('filterRow');
+  filterRow.innerHTML = categories.map((c,i)=>
+    '<button class="filter-btn'+(i===0?' active':'')+'" data-filter="'+c+'">'+(c==='all'?'All work':c.charAt(0).toUpperCase()+c.slice(1))+'</button>'
+  ).join('');
+
+  const portfolioGrid = document.getElementById('portfolioGrid');
+  portfolioGrid.innerHTML = PHOTOS.portfolio.map((p,i)=>
+    '<div class="tile" data-cat="'+p.cat+'" data-index="'+i+'">'+
+      '<img src="'+p.img+'" alt="'+p.title+'" loading="lazy" onerror="this.classList.add(\'broken\')">'+
+      phTile(p.cat,p.label)+
+      '<div class="cap"><b>'+p.title+'</b><span>'+p.label+'</span></div>'+
+    '</div>'
+  ).join('');
+
+  filterRow.addEventListener('click', e=>{
+    const btn = e.target.closest('.filter-btn');
+    if(!btn) return;
+    filterRow.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    portfolioGrid.querySelectorAll('.tile').forEach(t=>{
+      const match = f==='all' || t.dataset.cat===f;
+      t.classList.toggle('hide', !match);
+    });
+  });
+
+  /* ---------------- lightbox ---------------- */
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbTitle = document.getElementById('lbTitle');
+  const lbMeta = document.getElementById('lbMeta');
+  let lbIndex = 0;
+
+  function openLightbox(i){
+    lbIndex = i;
+    const p = PHOTOS.portfolio[i];
+    lbImg.src = p.img; lbImg.alt = p.title;
+    lbTitle.textContent = p.title; lbMeta.textContent = p.label;
+    lightbox.classList.add('open');
+  }
+  function closeLightbox(){ lightbox.classList.remove('open'); }
+  function stepLightbox(dir){ openLightbox((lbIndex+dir+PHOTOS.portfolio.length)%PHOTOS.portfolio.length); }
+
+  portfolioGrid.addEventListener('click', e=>{
+    const tile = e.target.closest('.tile');
+    if(!tile) return;
+    openLightbox(parseInt(tile.dataset.index,10));
+  });
+  homeFeatured.addEventListener('click', e=>{
+    const tile = e.target.closest('.tile');
+    if(!tile) return;
+    const idx = PHOTOS.portfolio.findIndex(p=>p.img===tile.dataset.openImg);
+    if(idx>-1) openLightbox(idx);
+  });
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbPrev').addEventListener('click', ()=>stepLightbox(-1));
+  document.getElementById('lbNext').addEventListener('click', ()=>stepLightbox(1));
+  lightbox.addEventListener('click', e=>{ if(e.target===lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e=>{
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key==='Escape') closeLightbox();
+    if(e.key==='ArrowLeft') stepLightbox(-1);
+    if(e.key==='ArrowRight') stepLightbox(1);
+  });
+
+  /* ---------------- testimonials ---------------- */
+  const testiSlides = document.getElementById('testiSlides');
+  const testiDots = document.getElementById('testiDots');
+  testiSlides.innerHTML = TESTIMONIALS.map((t,i)=>
+    '<div class="testi-slide'+(i===0?' active':'')+'" data-i="'+i+'">'+
+      '<div class="testi-stars">'+ICONS.star.repeat(5)+'</div>'+
+      '<p class="testi-quote">\u201C'+t.quote+'\u201D</p>'+
+      '<div class="testi-person"><div class="testi-avatar">'+t.name.charAt(0)+'</div>'+
+      '<div class="who"><b>'+t.name+'</b><span>'+t.role+'</span></div></div>'+
+    '</div>'
+  ).join('');
+  testiDots.innerHTML = TESTIMONIALS.map((_,i)=> '<button data-i="'+i+'" class="'+(i===0?'active':'')+'" aria-label="Go to testimony '+(i+1)+'"></button>').join('');
+
+  let testiIndex = 0, testiTimer;
+  function showTesti(i){
+    testiIndex = (i+TESTIMONIALS.length)%TESTIMONIALS.length;
+    testiSlides.querySelectorAll('.testi-slide').forEach((s,idx)=>s.classList.toggle('active', idx===testiIndex));
+    testiDots.querySelectorAll('button').forEach((d,idx)=>d.classList.toggle('active', idx===testiIndex));
+  }
+  function autoTesti(){
+    clearInterval(testiTimer);
+    testiTimer = setInterval(()=>showTesti(testiIndex+1), 6000);
+  }
+  document.getElementById('testiPrev').addEventListener('click', ()=>{ showTesti(testiIndex-1); autoTesti(); });
+  document.getElementById('testiNext').addEventListener('click', ()=>{ showTesti(testiIndex+1); autoTesti(); });
+  testiDots.addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    showTesti(parseInt(b.dataset.i,10)); autoTesti();
+  });
+  autoTesti();
+
+  /* ---------------- equipment (shows a real photo if PHOTOS.equipment[i].img is set) ---------------- */
+  const EQUIP_HUES = ['rgba(214,164,78,0.2)','rgba(147,72,47,0.22)','rgba(214,164,78,0.15)','rgba(147,72,47,0.18)'];
+  const equipGrid = document.getElementById('equipGrid');
+  equipGrid.innerHTML = PHOTOS.equipment.map((eq,i)=>
+    '<div class="equip-card">'+
+      '<div class="equip-visual">'+
+        (eq.img
+          ? '<img src="'+eq.img+'" alt="'+eq.name+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;" onerror="this.remove(); this.parentElement.dataset.broken=\'1\';">'
+          : ''
+        )+
+        '<div class="ph" style="--ph-a:'+EQUIP_HUES[i%4]+(eq.img?';display:none;':'')+'">'+
+          '<span style="display:inline-flex;width:36%;max-width:64px;color:var(--accent-soft);">'+ICONS[eq.icon]+'</span>'+
+        '</div><div class="ph-label" style="'+(eq.img?'display:none;':'')+'"><span class="sq"></span>'+eq.name+'</div>'+
+      '</div>'+
+      '<div class="equip-body"><h4>'+eq.name+'</h4><p>'+eq.desc+'</p><span class="equip-tag">'+eq.tag+'</span></div>'+
+    '</div>'
+  ).join('');
+
+  /* ---------------- nav: single continuous page, smooth-scroll to section ---------------- */
+  const sections = document.querySelectorAll('.page');
+  const navLinks = document.querySelectorAll('[data-nav]');
+  const navLinksWrap = document.getElementById('navLinks');
+  const navEl = document.getElementById('nav');
+  const menuBtn = document.getElementById('menuBtn');
+  const scrim = document.getElementById('scrim');
+
+  function setActiveNav(id){
+    navLinks.forEach(a=> a.classList.toggle('active', a.dataset.nav===id));
+  }
+
+  function openMenu(){
+    navLinksWrap.classList.add('open');
+    navEl.classList.add('menu-open');
+    scrim.classList.add('show');
+    menuBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>';
+  }
+  function closeMenu(){
+    navLinksWrap.classList.remove('open');
+    navEl.classList.remove('menu-open');
+    scrim.classList.remove('show');
+    menuBtn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="13" x2="21" y2="13"/><line x1="3" y1="19" x2="15" y2="19"/></svg>';
+  }
+  menuBtn.addEventListener('click', ()=>{
+    navLinksWrap.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  scrim.addEventListener('click', closeMenu);
+
+  navLinks.forEach(a=>{
+    a.addEventListener('click', e=>{
+      const id = a.dataset.nav;
+      const target = document.getElementById(id);
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+        history.pushState(null,'','#'+id);
+        setActiveNav(id);
+      }
+      closeMenu();
+    });
+  });
+
+  /* highlight the nav link for whichever section is in view while scrolling */
+  const sectionObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting) setActiveNav(entry.target.id);
+    });
+  }, { rootMargin:'-45% 0px -50% 0px', threshold:0 });
+  sections.forEach(s=> sectionObserver.observe(s));
+
+  /* land on the right section if the page loads with a hash */
+  if(location.hash){
+    const target = document.querySelector(location.hash);
+    if(target){
+      window.addEventListener('load', ()=>{
+        setTimeout(()=> target.scrollIntoView({behavior:'auto', block:'start'}), 0);
+      });
+    }
+  }
+  setActiveNav('home');
+
+  /* nav shrink on scroll */
+  window.addEventListener('scroll', ()=>{
+    navEl.classList.toggle('scrolled', window.scrollY>18);
+  }, {passive:true});
+
+})();
+</script>
+
+</body>
+</html>

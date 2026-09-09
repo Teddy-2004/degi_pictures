@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/images/:path*",
+      "destination": "https://media.githubusercontent.com/media/Teddy-2004/degi_pictures/main/images/:path*"
+    }
+  ]
+}

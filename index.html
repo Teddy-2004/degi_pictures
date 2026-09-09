@@ -627,6 +627,7 @@
         <div class="hero-photo"><img id="heroImg2" alt="Outdoor ceremony" onerror="this.classList.add('broken')"></div>
         <div class="hero-photo"><img id="heroImg3" alt="Aerial drone view" onerror="this.classList.add('broken')"></div>
         <div class="hero-photo"><img id="heroImg4" alt="Studio portrait" onerror="this.classList.add('broken')"></div>
+        <div class="hero-photo"><img id="heroImg5" alt="Photography moment" onerror="this.classList.add('broken')"></div>
         <div class="hero-fallback"></div>
       </div>
 
@@ -895,7 +896,7 @@
     ],
 
     // Degi's photo on the "About Me" page
-    aboutPortrait: "images/degi1.jpg",
+    aboutPortrait: "https://res.cloudinary.com/p781trkc/image/upload/f_auto,q_auto/degi1",
 
     // Portfolio photos — add, remove or edit rows freely.
     // "cat" controls which filter button (Wedding, Drone, etc.) a photo shows under.
@@ -904,7 +905,7 @@
       { cat:'wedding',     label:'Wedding',     title:'Reception dance floor',    img:'images/cerm2.JPG' },
       { cat:'ceremony',    label:'Ceremony',    title:'Outdoor vows',             img:'images/cerm4.JPG' },
       { cat:'portrait',    label:'Portrait',    title:'Studio session',           img:'images/IMG_7485.JPG' },
-      { cat:'graduation',  label:'Graduation',  title:'Class of 2026',            img:'images/grad.JPG' },
+      { cat:'graduation',  label:'Graduation',  title:'Class of 2026',            img:'https://res.cloudinary.com/p781trkc/image/upload/v1788963764/grad.jpg' },
       { cat:'drone',       label:'Drone',       title:'Venue from above',         img:'images/IMG_7488.JPG' },
       { cat:'birthday',    label:'Birthday',    title:'Turning six',              img:'images/birth4.JPG.jpg' },
       { cat:'portrait',    label:'Portrait',    title:'Golden hour',              img:'images/birth5.JPG.jpg' },
@@ -986,11 +987,35 @@
   ).join('');
 
   /* ---------------- populate hero photos + about portrait from PHOTOS ---------------- */
-  ['heroImg1','heroImg2','heroImg3','heroImg4'].forEach((id,i)=>{
+  ['heroImg1','heroImg2','heroImg3','heroImg4','heroImg5'].forEach((id,i)=>{
     const url = PHOTOS.hero[i];
     const el = document.getElementById(id);
     if(url){ el.src = url; } else { el.classList.add('broken'); }
   });
+
+  /* ---------------- hero slideshow ---------------- */
+  const heroPhotos = Array.from(document.querySelectorAll('.hero-photo'));
+  let heroIndex = 0;
+  let heroTimer;
+
+  function showHero(index){
+    if(!heroPhotos.length) return;
+    heroIndex = (index + heroPhotos.length) % heroPhotos.length;
+    heroPhotos.forEach((photo,i)=>{
+      photo.classList.toggle('active', i === heroIndex);
+    });
+  }
+
+  function startHeroSlideshow(){
+    clearInterval(heroTimer);
+    if(heroPhotos.length > 1){
+      heroTimer = setInterval(()=>showHero(heroIndex + 1), 5000);
+    }
+  }
+
+  showHero(0);
+  startHeroSlideshow();
+
   (function(){
     const url = PHOTOS.aboutPortrait;
     const el = document.getElementById('aboutPortraitImg');
